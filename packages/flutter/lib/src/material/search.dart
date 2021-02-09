@@ -90,7 +90,6 @@ Future<T> showSearch<T>({
 /// call. Call [SearchDelegate.close] before re-using the same delegate instance
 /// for another [showSearch] call.
 abstract class SearchDelegate<T> {
-
   /// Constructor to be called by subclasses which may specify [searchFieldLabel], [keyboardType] and/or
   /// [textInputAction].
   ///
@@ -197,9 +196,9 @@ abstract class SearchDelegate<T> {
     final ThemeData theme = Theme.of(context);
     assert(theme != null);
     return theme.copyWith(
-      primaryColor: Colors.white,
-      primaryIconTheme: theme.primaryIconTheme.copyWith(color: Colors.grey),
-      primaryColorBrightness: Brightness.light,
+      primaryColor: Colors.redAccent,
+      primaryIconTheme: theme.primaryIconTheme.copyWith(color: Colors.white),
+      primaryColorBrightness: Brightness.dark,
       primaryTextTheme: theme.textTheme,
     );
   }
@@ -245,7 +244,8 @@ abstract class SearchDelegate<T> {
   ///
   ///  * [showResults] to show the search results.
   void showSuggestions(BuildContext context) {
-    assert(_focusNode != null, '_focusNode must be set by route before showSuggestions is called.');
+    assert(_focusNode != null,
+        '_focusNode must be set by route before showSuggestions is called.');
     _focusNode.requestFocus();
     _currentBody = _SearchBody.suggestions;
   }
@@ -299,9 +299,11 @@ abstract class SearchDelegate<T> {
 
   final TextEditingController _queryTextController = TextEditingController();
 
-  final ProxyAnimation _proxyAnimation = ProxyAnimation(kAlwaysDismissedAnimation);
+  final ProxyAnimation _proxyAnimation =
+      ProxyAnimation(kAlwaysDismissedAnimation);
 
-  final ValueNotifier<_SearchBody> _currentBodyNotifier = ValueNotifier<_SearchBody>(null);
+  final ValueNotifier<_SearchBody> _currentBodyNotifier =
+      ValueNotifier<_SearchBody>(null);
 
   _SearchBody get _currentBody => _currentBodyNotifier.value;
   set _currentBody(_SearchBody value) {
@@ -447,7 +449,8 @@ class _SearchPageState<T> extends State<_SearchPage<T>> {
     if (widget.delegate != oldWidget.delegate) {
       oldWidget.delegate._queryTextController.removeListener(_onQueryChanged);
       widget.delegate._queryTextController.addListener(_onQueryChanged);
-      oldWidget.delegate._currentBodyNotifier.removeListener(_onSearchBodyChanged);
+      oldWidget.delegate._currentBodyNotifier
+          .removeListener(_onSearchBodyChanged);
       widget.delegate._currentBodyNotifier.addListener(_onSearchBodyChanged);
       oldWidget.delegate._focusNode = null;
       widget.delegate._focusNode = focusNode;
@@ -455,7 +458,8 @@ class _SearchPageState<T> extends State<_SearchPage<T>> {
   }
 
   void _onFocusChanged() {
-    if (focusNode.hasFocus && widget.delegate._currentBody != _SearchBody.suggestions) {
+    if (focusNode.hasFocus &&
+        widget.delegate._currentBody != _SearchBody.suggestions) {
       widget.delegate.showSuggestions(context);
     }
   }
@@ -476,12 +480,12 @@ class _SearchPageState<T> extends State<_SearchPage<T>> {
   Widget build(BuildContext context) {
     assert(debugCheckHasMaterialLocalizations(context));
     final ThemeData theme = widget.delegate.appBarTheme(context);
-    final String searchFieldLabel = widget.delegate.searchFieldLabel
-      ?? MaterialLocalizations.of(context).searchFieldLabel;
-    final TextStyle searchFieldStyle = widget.delegate.searchFieldStyle
-      ?? theme.inputDecorationTheme.hintStyle;
+    final String searchFieldLabel = widget.delegate.searchFieldLabel ??
+        MaterialLocalizations.of(context).searchFieldLabel;
+    final TextStyle searchFieldStyle = widget.delegate.searchFieldStyle ??
+        theme.inputDecorationTheme.hintStyle;
     Widget body;
-    switch(widget.delegate._currentBody) {
+    switch (widget.delegate._currentBody) {
       case _SearchBody.suggestions:
         body = KeyedSubtree(
           key: const ValueKey<_SearchBody>(_SearchBody.suggestions),
@@ -523,7 +527,7 @@ class _SearchPageState<T> extends State<_SearchPage<T>> {
           title: TextField(
             controller: widget.delegate._queryTextController,
             focusNode: focusNode,
-            style: theme.textTheme.headline6,
+            style: TextStyle(fontSize: 17, color: Colors.white),
             textInputAction: widget.delegate.textInputAction,
             keyboardType: widget.delegate.keyboardType,
             onSubmitted: (String _) {
@@ -531,8 +535,8 @@ class _SearchPageState<T> extends State<_SearchPage<T>> {
             },
             decoration: InputDecoration(
               border: InputBorder.none,
-              hintText: searchFieldLabel,
-              hintStyle: searchFieldStyle,
+              hintText: 'Search news here...',
+              hintStyle: TextStyle(color: Colors.white, fontSize: 17),
             ),
           ),
           actions: widget.delegate.buildActions(context),
