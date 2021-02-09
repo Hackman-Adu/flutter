@@ -527,7 +527,7 @@ class _SearchPageState<T> extends State<_SearchPage<T>> {
           title: TextField(
             controller: widget.delegate._queryTextController,
             focusNode: focusNode,
-            style: TextStyle(fontSize: 17, color: Colors.white),
+            style: TextStyle(fontSize: 18, color: Colors.white),
             textInputAction: widget.delegate.textInputAction,
             keyboardType: widget.delegate.keyboardType,
             onSubmitted: (String _) {
@@ -536,7 +536,7 @@ class _SearchPageState<T> extends State<_SearchPage<T>> {
             decoration: InputDecoration(
               border: InputBorder.none,
               hintText: 'Search news here...',
-              hintStyle: TextStyle(color: Colors.white, fontSize: 17),
+              hintStyle: TextStyle(color: Colors.white, fontSize: 18),
             ),
           ),
           actions: widget.delegate.buildActions(context),
